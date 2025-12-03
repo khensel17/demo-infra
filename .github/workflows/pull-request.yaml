@@ -1,0 +1,45 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  bicep-validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app:
+          - demo-helloworld-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Azure CLI installation
+        runs-on: self-hosted
+        run: |
+          az --version
+          az account show
+
+      - name: Substitute secure token in parameters file
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          envsubst < ${{ matrix.app }}/parameters.dev.json > ${{ matrix.app }}/parameters.dev.substituted.json
+          mv ${{ matrix.app }}/parameters.dev.substituted.json ${{ matrix.app }}/parameters.dev.json
+
+      - name: Bicep Lint
+        run: |
+          az bicep install
+          echo "Linting Bicep files in ${{ matrix.app }}"
+          find ${{ matrix.app }} -name "*.bicep" -exec az bicep lint --file {} \;
+
+      - name: Bicep Build (Compile to ARM)
+        run: |
+          az bicep build --file ${{ matrix.app }}/main.bicep
+
+      - name: Upload compiled ARM template
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm-templates
+          path: ${{ matrix.app }}/main.json
