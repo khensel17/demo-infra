@@ -30,12 +30,6 @@ jobs:
       #     inlineScript: |
       #       az account show
 
-      - name: Check Azure CLI installation
-        runs-on: self-hosted
-        run: |
-          az --version
-          az account show
-
       - name: Substitute secure token in parameters file
         env:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

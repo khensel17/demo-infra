@@ -15,12 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check Azure CLI installation
-        runs-on: self-hosted
-        run: |
-          az --version
-          az account show
-
       - name: Substitute secure token in parameters file
         env:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -43,3 +37,10 @@ jobs:
         with:
           name: arm-templates
           path: ${{ matrix.app }}/main.json
+  test:
+    runs-on: self-hosted
+    steps:
+      - name: Check Azure CLI installation
+        run: |
+          az --version
+          az account show
