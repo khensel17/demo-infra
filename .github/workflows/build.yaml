@@ -48,4 +48,4 @@ jobs:
           az deployment group create \
             --resource-group rg-${{ matrix.app }} \
             --template-file ./${{ matrix.app }}/main.bicep \
-            --parameters @${{ matrix.app }}/parameters.dev.parameters.json
+            --parameters @${{ matrix.app }}/parameters.dev.json
