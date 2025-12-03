@@ -9,7 +9,7 @@ on:
 jobs:
   deploy:
     needs: discover-apps
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         app:
