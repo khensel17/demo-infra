@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "containerAppEnvName": {
+      "value": "demo-env"
+    },
+    "containerAppName": {
+      "value": "demo-helloworld-app"
+    },
+    "containerImage": {
+      "value": "docker.io/khensel/demo-helloworld-app:latest"
+    },
+    "dockerHubUsername": {
+      "value": "khensel"
+    },
+    "dockerHubToken": {
+      "value": "$DOCKERHUB_TOKEN"
+    },
+    "cpuCores": {
+      "value": "0.25"
+    },
+    "memoryGiB": {
+      "value": "0.5"
+    }
+  }
+}

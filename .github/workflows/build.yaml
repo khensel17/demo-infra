@@ -1,0 +1,52 @@
+
+name: Deploy Multi-App to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    needs: discover-apps
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        app:
+          - demo-helloworld-app
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # - name: Azure Login
+      #   uses: azure/login@v2
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # - name: Set up Azure CLI
+      #   uses: azure/cli@v2
+      #   with:
+      #     azcliversion: latest
+      #     inlineScript: |
+      #       az account show
+
+      - name: Substitute secure token in parameters file
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          envsubst < ${{ matrix.app }}/parameters.dev.json > ${{ matrix.app }}/parameters.dev.substituted.json
+          mv ${{ matrix.app }}/parameters.dev.substituted.json ${{ matrix.app }}/parameters.dev.json
+
+      - name: Lint and Validate Bicep for ${{ matrix.app }}
+        run: |
+          az bicep install
+          echo "Linting Bicep files in ${{ matrix.app }}"
+          az bicep build --file ./${{ matrix.app }}/main.bicep
+
+      - name: Deploy Bicep for ${{ matrix.app }}
+        run: |
+          az group create --name rg-${{ matrix.app }} --location westeurope
+          az deployment group create \
+            --resource-group rg-${{ matrix.app }} \
+            --template-file ./${{ matrix.app }}/main.bicep \
+            --parameters @${{ matrix.app }}/parameters/dev.parameters.json
