@@ -6,8 +6,6 @@ param cpu string
 param memory string
 param environmentVariables array = []
 param envName string
-// param logAnalyticsId string
-// param keyVaultId string
 param dockerHubUsername string
 @secure()
 param dockerHubToken string
@@ -76,3 +74,7 @@ resource containerApp 'Microsoft.App/containerapps@2025-02-02-preview' = {
     }
   }
 }
+
+output containerAppId string = containerApp.id
+output containerAppName string = containerApp.name
+output containerAppUrl string = containerApp.properties.configuration.ingress.fqdn
