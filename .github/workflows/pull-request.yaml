@@ -37,10 +37,3 @@ jobs:
         with:
           name: arm-templates
           path: ${{ matrix.app }}/main.json
-  test:
-    runs-on: self-hosted
-    steps:
-      - name: Check Azure CLI installation
-        run: |
-          az --version
-          az account show
