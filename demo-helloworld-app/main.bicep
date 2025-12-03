@@ -22,25 +22,13 @@ param cpuCores string = '0.5'
 @description('Memory in GiB for the container')
 param memoryGiB string = '1.0'
 
-// @description('Key Vault name')
-// param keyVaultName string
-
-// @description('Log Analytics workspace name')
-// param logAnalyticsName string
+@description('Environment variables for the container app')
+param environmentVariables array = []
 
 // Resource group info module (returns current RG properties)
 module resourceGroupDeploy './modules/resourcegroup.bicep' = {
   name: 'resourceGroup'
 }
-
-// Deploy Log Analytics
-// module logAnalytics './modules/loganalytics.bicep' = {
-//   name: 'logAnalyticsDeploy'
-//   params: {
-//     name: logAnalyticsName
-//     location: resourceGroupDeploy.outputs.resourceGroupLocation
-//   }
-// }
 
 // Deploy Managed Environment
 module managedEnvironmentDeploy './modules/managedEnvironment.bicep' = {
@@ -51,15 +39,6 @@ module managedEnvironmentDeploy './modules/managedEnvironment.bicep' = {
     // logAnalyticsCustomerId: logAnalytics.outputs.workspaceCustomerId
   }
 }
-
-// Deploy Key Vault
-// module keyVault './modules/keyvault.bicep' = {
-//   name: 'keyVaultDeploy'
-//   params: {
-//     name: keyVaultName
-//     location: location
-//   }
-// }
 
 // Deploy Container App
 module containerApp './modules/containerapp.bicep' = {
@@ -72,9 +51,8 @@ module containerApp './modules/containerapp.bicep' = {
     cpu: cpuCores
     memory: memoryGiB
     envName: containerAppEnvName
-    // logAnalyticsId: logAnalytics.outputs.workspaceCustomerId
-    // keyVaultId: keyVault.outputs.vaultId
     dockerHubUsername: dockerHubUsername
     dockerHubToken: dockerHubToken
+    environmentVariables: environmentVariables
   }
 }

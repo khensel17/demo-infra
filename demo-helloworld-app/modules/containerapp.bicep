@@ -4,6 +4,7 @@ param location string
 param image string
 param cpu string
 param memory string
+param environmentVariables array = []
 param envName string
 // param logAnalyticsId string
 // param keyVaultId string
@@ -69,12 +70,7 @@ resource containerApp 'Microsoft.App/containerapps@2025-02-02-preview' = {
             cpu: json(cpu)
             memory: '${memory}Gi'
           }
-          env: [
-            {
-              name: 'BG_COLOR'
-              value: 'lightblue'
-            }
-          ]
+          env: environmentVariables
         }
       ]
     }
