@@ -18,16 +18,16 @@
       "value": "$DOCKERHUB_TOKEN"
     },
     "cpuCores": {
-      "value": "0.25"
+      "value": "0.5"
     },
     "memoryGiB": {
-      "value": "0.5"
+      "value": "1.0"
     },
     "environmentVariables": {
       "value": [
         {
           "name": "BG_COLOR",
-          "value": "orange"
+          "value": "lightblue"
         }
       ]
     }
