@@ -36,7 +36,6 @@ module managedEnvironmentDeploy './modules/managedEnvironment.bicep' = {
   params: {
     name: containerAppEnvName
     location: resourceGroupDeploy.outputs.resourceGroupLocation
-    // logAnalyticsCustomerId: logAnalytics.outputs.workspaceCustomerId
   }
 }
 
